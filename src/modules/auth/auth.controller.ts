@@ -145,3 +145,23 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
   return res.json({ message: "Email verified successfully" });
 };
+export const changePassword = async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user?.id;
+    const { currentPassword, newPassword } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const result = await authService.changePassword(
+      userId,
+      currentPassword,
+      newPassword
+    );
+
+    return res.json(result);
+  } catch (err: any) {
+    return res.status(400).json({ message: err.message });
+  }
+};
